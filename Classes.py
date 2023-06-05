@@ -1,5 +1,5 @@
 import pygame
-from Main import money
+import Common
 
 class Shooter:
 
@@ -10,26 +10,31 @@ class Shooter:
     dragging = False
     bought = False
 
-    def __init__(self,level,location):
+    def __init__(self,level,location,set):
         self.level = level
         self.location = location
+        self.set = set
 
-    @classmethod
-    def deploy(self,money):
-        for events in pygame.event.get():
-            if self.shooter_rect.collidepoint() and pygame.MOUSEBUTTONDOWN:
+    def move(self):
+         for events in pygame.event.get():
+            if events.type == self.shooter_rect.collidepoint() and pygame.MOUSEBUTTONDOWN and self.set == False:
                 self.dragging = True
-            elif pygame.MOUSEBUTTONUP:
+            if events.type == pygame.MOUSEBUTTONUP:
                 self.dragging = False
-            elif pygame.MOUSEMOTION and self.dragging:
+                self.set == True
+            if events.type == pygame.MOUSEMOTION and self.dragging:
                 self.shooter_rect.move_ip(events.rel)
-            elif self.shooter_rect.x <= 900 and money >= 250:
-                self.bought = True
+
+    def deploy(self):
+        if self.shooter_rect.x <= 900 and Common.money >= 250:
+            self.bought = True
+            Common.money -= 250
 
     
     def create(self):
         if self.bought == True:
-            self.shooter_rect.duplicate()
+            self.shooter_rect_d = self.shooter_rect.duplicate()
+            self.move()
 
 
 
