@@ -1,40 +1,50 @@
 import pygame
 import Common
 
-class Shooter:
+
+class Buttons:
 
     #surface & rects
     shooter_rect = pygame.Rect((1000,300),(100,100))
 
+    #Buying and placement related variables
+    bought = False
+    dragging = False
+    ready_to_buy = True
+
+    def __init__(self):
+        pass
+
+    def purchase():
+        if Common.money >= 250 and Buttons.shooter_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+            Buttons.bought = True
+            Common.money -= 250
+            Buttons.ready_to_buy = False 
+
+
+
+class Shooter:
+
     #function related variables
     dragging = False
-    bought = False
+    shooter_num = 1
 
-    def __init__(self,level,location,set):
-        self.level = level
-        self.location = location
-        self.set = set
+    def __init__(self,placed):
+        self.placed = placed
 
-    def move(self):
-         for events in pygame.event.get():
-            if events.type == self.shooter_rect.collidepoint() and pygame.MOUSEBUTTONDOWN and self.set == False:
-                self.dragging = True
-            if events.type == pygame.MOUSEBUTTONUP:
-                self.dragging = False
-                self.set == True
-            if events.type == pygame.MOUSEMOTION and self.dragging:
-                self.shooter_rect.move_ip(events.rel)
-
-    def deploy(self):
-        if self.shooter_rect.x <= 900 and Common.money >= 250:
-            self.bought = True
-            Common.money -= 250
-
-    
     def create(self):
-        if self.bought == True:
-            self.shooter_rect_d = self.shooter_rect.duplicate()
-            self.move()
+        self.shooter  = Shooter
+
+    def place_rights(self):
+        if Buttons.bought == True and Buttons.shooter_rect.collidepoint(pygame.mouse.get_pos()) and pygame.MOUSEBUTTONDOWN:
+            self.shooter_rect_c = Buttons.shooter_rect.copy()
+            self.dragging = True
+
+    def moving(self):
+            if self.dragging:
+                self.shooter_rect_c.move_ip(pygame.mouse.get_pos())
+            if pygame.MOUSEBUTTONUP:
+                self.dragging = False
 
 
 
