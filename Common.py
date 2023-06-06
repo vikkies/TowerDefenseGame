@@ -1,3 +1,3 @@
 import pygame
 
-money = 0
+money = 500
